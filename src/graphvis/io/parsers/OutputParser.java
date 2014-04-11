@@ -35,8 +35,10 @@ public class OutputParser
 			});
 			
 			// Insert SVG/HTML+SVG Headers here
-			outFile.println("<svg xmlns=\"http://www.w3.org/2000/svg\""+
-					" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"10000\" height =\"10000\" >\n");
+			outFile.println("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n"
+					+ "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n"
+					+ "<script xlink:href=\"SVGPan.js\"/>\n"
+					+ "<g id=\"viewport\" transform=\"translate(200,200)\">\n");
 			
 			for (File part: fileParts )
 			{
@@ -50,7 +52,7 @@ public class OutputParser
 				br.close();
 			}
 			
-			outFile.println("</svg>");
+			outFile.println("</g>\n</svg>");
 			outFile.close();
 		}
 		else

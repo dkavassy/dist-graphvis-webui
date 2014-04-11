@@ -44,7 +44,7 @@ public class DownloadServlet extends HttpServlet
 		OutputParser op = new OutputParser();
 		try 
 		{
-			op.parseAndCombine(tempDirectory.replaceAll(fileName, "graphvis"), resultFile);
+			//op.parseAndCombine(tempDirectory.replaceAll(fileName, "graphvis"), resultFile);
 		} 
 		catch (Exception e) 
 		{

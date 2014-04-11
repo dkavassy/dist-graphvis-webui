@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="HDFS_WebClient">
+    <wb-module deploy-name="dist-graphvis-webui">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <property name="context-root" value="HDFS_WebClient"/>
-        <property name="java-output-path" value="/HDFS_WebClient/build/classes"/>
+        <property name="context-root" value="dist-graphvis-webui"/>
+        <property name="java-output-path" value="/dist-graphvis-webui/build/classes"/>
     </wb-module>
 </project-modules>

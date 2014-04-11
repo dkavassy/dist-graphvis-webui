@@ -26,7 +26,7 @@ public class OutputParser
 				@Override
 				public boolean accept(File dir, String name) 
 				{
-					if (name.contains("part-m"))
+					if (name.contains("part-m") && !name.endsWith("crc"))
 					{
 						return true;
 					}

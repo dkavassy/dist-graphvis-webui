@@ -104,6 +104,7 @@ public class ShellBuilder
 				+ "-eip " + fileName + " \\\n"
 				+ "-vof" + " graphvis.io.SVGVertexOutputFormat \\\n"
 				+ "-op output/graphvis \\\n"
+				+ "-mc graphvis.engine.GraphvisMasterCompute \\\n"
 				+ "-w " + workers + " \\\n"
 				+ "-yj giraph-1.1.0-SNAPSHOT-for-hadoop-2.2.0-jar-with-dependencies.jar";
 		

@@ -44,7 +44,7 @@ public class DownloadServlet extends HttpServlet
 		OutputParser op = new OutputParser();
 		try 
 		{
-			//op.parseAndCombine(tempDirectory.replaceAll(fileName, "graphvis"), resultFile);
+			op.parseAndCombine(tempDirectory.replaceAll(fileName, "graphvis"), resultFile);
 		} 
 		catch (Exception e) 
 		{
@@ -53,14 +53,17 @@ public class DownloadServlet extends HttpServlet
 		System.out.println("Redirecting now..");
 		
 		//response.sendRedirect(resultFile);
-		response.setContentType("text/xml");
+		response.setContentType("image/svg+xml");
 		File file = new File(resultFile);
+		response.setContentLength((int) file.length());
 		FileInputStream fileIn = new FileInputStream(file);
 		ServletOutputStream out = response.getOutputStream();
-		byte[] outputByte = new byte[4096];
-		while(fileIn.read(outputByte, 0, 4096) != -1)
+		//out.print("\r\n\r\n");
+		
+		byte[] outputByte = new byte[1];
+		while(fileIn.read(outputByte) != -1)
 		{
-			out.write(outputByte, 0, 4096);
+			out.write(outputByte);
 		}
 		fileIn.close();
 		out.flush();

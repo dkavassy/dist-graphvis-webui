@@ -69,20 +69,23 @@ public class ShellBuilder
 	private static String inputFormatChooser(String ext) throws IOException
 	{
 		// Select input format name. 
+		String format;
 		switch(ext)
 		{
 			case "graphml":
-				return "graphvis.io.GraphMLEdgeInputFormat";
-
+				format = "graphvis.io.GraphMLEdgeInputFormat";
+				break;
 			case "gml":
-				return "graphvis.io.GMLEdgeInputFormat";
-				
+				format = "graphvis.io.GMLEdgeInputFormat";
+				break;
 			case "csv":
-				return "graphvis.io.CSVEdgeInputFormat";
-				
+				format = "graphvis.io.CSVEdgeInputFormat";
+				break;
 			default:
-			throw new IOException("Invalid input format!");
-		}		
+				throw new IOException("Invalid input format!");
+		}
+		
+		return format;
 	}
 	
 	

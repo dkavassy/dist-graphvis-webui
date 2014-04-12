@@ -10,13 +10,7 @@ import java.io.PrintWriter;
 
 public class OutputParser 
 {
-	// Only for testing
-	public static void main(String[] args) throws Exception 
-	{
-		OutputParser op = new OutputParser();
-		op.parseAndCombine("/home/james/crashBunker/conglom", "/home/james/crashBunker/conglom/CombinedResults.txt");
-	}
-	
+
 	public void parseAndCombine(String inputFolder, String outputFile) throws FileNotFoundException, IOException
 	{
 		File folder = new File(inputFolder);

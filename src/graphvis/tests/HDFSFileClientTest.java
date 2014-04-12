@@ -44,6 +44,7 @@ public class HDFSFileClientTest
 	@After
 	public void tearDown() throws Exception 
 	{
+		
 		dfs.fileSystem.delete(new Path("./testLocalFile.txt"), true);
 		localFile.delete();
 	}
@@ -156,6 +157,13 @@ public class HDFSFileClientTest
 				assertTrue(foundFlag);
 			}
 		}
+		
+	}
+	
+	@Test(expected=FileNotFoundException.class)
+	public void testFileNotFound() throws FileNotFoundException, IllegalArgumentException, IOException 
+	{
+		dfs.moveFromLocal("./testLocalFile.txt", "/nonexistent");
 	}
 
 	

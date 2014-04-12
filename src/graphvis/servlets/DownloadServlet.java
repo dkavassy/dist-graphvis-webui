@@ -38,27 +38,23 @@ public class DownloadServlet extends HttpServlet
 			throws ServletException, IOException 
 	{
 		String fileName = (String) getServletContext().getAttribute("fileName");
-		String tempDirectory = (String) getServletContext().getAttribute("tempDirectory");
-		String resultFile = tempDirectory.replaceAll(fileName,"CombinedResults.txt");
+		String tempDirectory = UploadServlet.tempDirectory;
+		String resultFile = tempDirectory + "/CombinedResults.txt";
+		
 		System.out.println("Download request GOT...combining now");
+		
 		OutputParser op = new OutputParser();
-		try 
-		{
-			op.parseAndCombine(tempDirectory.replaceAll(fileName, "graphvis"), resultFile);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();
-		}
+		op.parseAndCombine(tempDirectory + File.separator + RunnerServlet.hdfsWorkingDirectory, resultFile);
+		
 		System.out.println("Redirecting now..");
 		
-		//response.sendRedirect(resultFile);
+		// Send SVG file
 		response.setContentType("image/svg+xml");
+		
 		File file = new File(resultFile);
 		response.setContentLength((int) file.length());
-		FileInputStream fileIn = new FileInputStream(file);
+		FileInputStream  fileIn = new FileInputStream(file);
 		ServletOutputStream out = response.getOutputStream();
-		//out.print("\r\n\r\n");
 		
 		byte[] outputByte = new byte[1];
 		while(fileIn.read(outputByte) != -1)
@@ -66,6 +62,7 @@ public class DownloadServlet extends HttpServlet
 			out.write(outputByte);
 		}
 		fileIn.close();
+		
 		out.flush();
 		out.close();
 		

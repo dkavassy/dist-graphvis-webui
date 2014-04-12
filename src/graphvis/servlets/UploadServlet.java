@@ -44,6 +44,7 @@
 
 package graphvis.servlets;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -60,6 +61,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
 import graphvis.hdfs.HDFSFileClient;
@@ -79,8 +81,10 @@ public class UploadServlet extends HttpServlet
 	private static final long serialVersionUID = 1L;
        
 	// Application caters for very large files.
-    private static final int MAX_MEMORY_SIZE = 1024 * 1024 * 1024 * 5;
+    private static final int MAX_MEMORY_SIZE  = 1024 * 1024 * 1024 * 5;
     private static final int MAX_REQUEST_SIZE = 1024 * 1024 * 1024 * 5;
+    
+    public static final String tempDirectory = System.getProperty("java.io.tmpdir") + "/graphvis";
 
     /**
      * This method receives POST from the index.jsp page and uploads file, 
@@ -94,8 +98,25 @@ public class UploadServlet extends HttpServlet
 
         if (!isMultipart) 
         {
+        	response.setStatus(403);
+            response.sendRedirect("/error.jsp");
             return;
         }
+        
+        File tempDirFileObject = new File(tempDirectory);
+        
+        // Create/remove temp folder
+        if (tempDirFileObject.exists())
+        {
+        	FileUtils.deleteDirectory(tempDirFileObject);
+        }
+        
+        // (Re-)create temp directory
+        tempDirFileObject.mkdir();
+        FileUtils.copyFile(
+        		new File(getServletContext().getRealPath("giraph-1.1.0-SNAPSHOT-for-hadoop-2.2.0-jar-with-dependencies.jar")),
+        		new File(tempDirectory + "/giraph-1.1.0-SNAPSHOT-for-hadoop-2.2.0-jar-with-dependencies.jar")
+        		);
 
         // Create a factory for disk-based file items
         DiskFileItemFactory factory = new DiskFileItemFactory();
@@ -109,59 +130,67 @@ public class UploadServlet extends HttpServlet
         // java
         factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
 
-        // constructs the folder where uploaded file will be stored
-        String uploadFolder = getServletContext().getRealPath("");
-
         // Create a new file upload handler
         ServletFileUpload upload = new ServletFileUpload(factory);
 
         // Set overall request size constraint
         upload.setSizeMax(MAX_REQUEST_SIZE);
 
-        String globalFileName = "";
+        String fileName = "";
         try 
         {
             // Parse the request
-            List items = upload.parseRequest(request);
-            Iterator iter = items.iterator();
+            List<?>    items = upload.parseRequest(request);
+            Iterator<?> iter = items.iterator();
             while (iter.hasNext()) 
             {
                 FileItem item = (FileItem) iter.next();
 
                 if (!item.isFormField())
                 {
-                    String fileName = new File(item.getName()).getName();
-                    String filePath = uploadFolder + File.separator + fileName;
+                    fileName = new File(item.getName()).getName();
+                    String filePath = tempDirectory + File.separator + fileName;
                     File uploadedFile = new File(filePath);
                     System.out.println(filePath);
-                    globalFileName = fileName;
                     // saves the file to upload directory
                     item.write(uploadedFile);
                 }
             }
 
-            String fullFilePath = uploadFolder + File.separator + globalFileName;
-            // this is where we do the parsing.
+            String fullFilePath = tempDirectory + File.separator + fileName;
+            
             String extension = FilenameUtils.getExtension(fullFilePath);
 
-            // load Files intoHDFS
+            // Load Files intoHDFS
+            // (This is where we do the parsing.)
             loadIntoHDFS(fullFilePath, extension);
 
-            getServletContext().setAttribute("fileName", new File(fullFilePath).getName());
-    		getServletContext().setAttribute("fileExtension",extension);
-    		getServletContext().setAttribute("tempDirectory", new File(fullFilePath).getPath());            
-    		 // displays fileUploaded.jsp page after upload finished
+            getServletContext().setAttribute("fileName",      new File(fullFilePath).getName());
+    		getServletContext().setAttribute("fileExtension", extension);
+    		
+    		// Displays fileUploaded.jsp page after upload finished
             getServletContext().getRequestDispatcher("/fileUploaded.jsp").forward(
                     request, response);
             
-        } catch (FileUploadException ex) 
-        {
-            throw new ServletException(ex);
-        } 
-        catch (Exception ex) 
+        }
+        catch (FileUploadException ex) 
         {
             throw new ServletException(ex);
         }
+        catch (FileNotFoundException ex) 
+        {
+        	getServletContext().setAttribute("errorMessage", ex);
+            response.sendRedirect("/error.jsp");
+        } 
+        catch (IOException ex) 
+        {
+        	getServletContext().setAttribute("errorMessage", ex);
+            response.sendRedirect("/error.jsp");
+        }
+        catch (Exception ex)
+        {
+            throw new ServletException(ex);
+		}
 
     }
     
@@ -174,12 +203,12 @@ public class UploadServlet extends HttpServlet
      * @param extension is the {@link String} representation of the file extension.
      * @throws Exception
      */
-    private void loadIntoHDFS(String fullFilePath, String extension) throws Exception
+    private void loadIntoHDFS(String fullFilePath, String extension) throws IOException
     {
     	// Choose appropriate procedure based on extension.
         if (extension.equalsIgnoreCase("csv"))	
         {
-        	// no problem - just upload it
+        	// No problem - just upload it
         	HDFSFileClient hfc = new HDFSFileClient();
             hfc.moveFromLocal(fullFilePath, "."); 
             System.out.println("File has been uploaded to server");
@@ -207,7 +236,7 @@ public class UploadServlet extends HttpServlet
         else
         {
         	// invalid input file has been uploaded - throw below exception.
-        	throw new Exception("Invalid input files: Please check input file extension - valid formats are .csv .gml .graphml ");
+        	throw new IOException("Invalid input files: Please check input file extension - valid formats are .csv .gml .graphml ");
         }
     }
 

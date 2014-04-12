@@ -44,6 +44,7 @@
 
 package graphvis.hdfs;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.apache.hadoop.conf.Configuration;
@@ -61,30 +62,20 @@ public class HDFSFileClient
 {
 	// Private field to store configuration object
 	private Configuration conf ;
-	public FileSystem fileSystem;
+	public  FileSystem fileSystem;
 	
-	public HDFSFileClient()
+	public HDFSFileClient() throws IOException
 	{
 		conf = new Configuration();
 		// Get the requisite environment variable from the host system below. 
 		String hadoop_home = System.getenv("HADOOP_HOME");
 		// Set the required information needed for the configuration object to work.
-		conf.addResource(new Path(hadoop_home + "etc/hadoop/core-site.xml"));
-		conf.addResource(new Path(hadoop_home + "etc/hadoop/hdfs-site.xml"));
-		conf.addResource(new Path(hadoop_home + "etc/hadoop/mapred-site.xml"));
+		conf.addResource(new Path(hadoop_home + "/etc/hadoop/core-site.xml"));
+		conf.addResource(new Path(hadoop_home + "/etc/hadoop/hdfs-site.xml"));
+		conf.addResource(new Path(hadoop_home + "/etc/hadoop/mapred-site.xml"));
 		
-		try 
-		{
-			// Assign the file system object the configuration
-			fileSystem = FileSystem.get(conf);
-		} 
-		catch (IOException e) 
-		{
-			System.out.println("HDFS File Client cannot be created due to environment "
-					+ "variables being incorrectly set or HDFS not started.");
-			e.printStackTrace();
-			System.exit(1);
-		}
+		// Assign the file system object the configuration
+		fileSystem = FileSystem.get(conf); 
 	}
 	
 	
@@ -99,28 +90,19 @@ public class HDFSFileClient
 	public void moveFromLocal (String source, String dest) throws IOException 
 	{		 
 		Path srcPath = new Path(source);
-		 
 		Path dstPath = new Path(dest);
+		
 		// Check if the file already exists
 		if (!(fileSystem.exists(dstPath))) 
 		{
-			System.out.println("No such destination " + dstPath);
-			return;
+			throw new FileNotFoundException();
 		}
 		 
 		// Get the filename out of the file path
 		String filename = source.substring(source.lastIndexOf('/') + 1, source.length());
 		 
-		try
-		{
-			fileSystem.moveFromLocalFile(srcPath, dstPath);
-			System.out.println("File " + filename + " moved to " + dest);
-		}
-		catch(Exception e)
-		{
-			System.err.println("Exception caught! :" + e);
-			System.exit(1);
-		}
+		fileSystem.moveFromLocalFile(srcPath, dstPath);
+		System.out.println("File " + filename + " moved to " + dest);
 	}
 
 	/**
@@ -135,24 +117,15 @@ public class HDFSFileClient
 	{	
 		
 		Path srcPath = new Path(source);
-		 
 		Path dstPath = new Path(dest);
 		 
 		// Get the filename out of the file path
-		String filename = source.substring(source.lastIndexOf('/') + 1, source.length());
-		 
-		try
-		{
-			fileSystem.moveToLocalFile(srcPath, dstPath);
-			System.out.println("File " + filename + " moved to " + dest);
-		}
-		catch(Exception e)
-		{
-			System.err.println("Exception caught! :" + e);
-			System.exit(1);
-		}
-		
+		String filename = srcPath.getName();
+
+		fileSystem.moveToLocalFile(srcPath, dstPath);
+		System.out.println("File " + filename + " moved to " + dest);
 	}
+	
 	@Override
 	protected void finalize() throws Throwable 
 	{

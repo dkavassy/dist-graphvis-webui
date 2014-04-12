@@ -2,22 +2,30 @@ package graphvis.io.parsers;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 public class OutputParser 
 {
+	// Only for testing
 	public static void main(String[] args) throws Exception 
 	{
 		OutputParser op = new OutputParser();
 		op.parseAndCombine("/home/james/crashBunker/conglom", "/home/james/crashBunker/conglom/CombinedResults.txt");
 	}
-	public void parseAndCombine(String inputFolder, String outputFile) throws Exception
+	
+	public void parseAndCombine(String inputFolder, String outputFile) throws FileNotFoundException, IOException
 	{
 		File folder = new File(inputFolder);
 		
-		PrintWriter outFile = new PrintWriter(new File(outputFile));
+		File outputFileObject = new File(outputFile);
+		
+		outputFileObject.createNewFile();
+		
+		PrintWriter outFile = new PrintWriter(outputFileObject);
 		
 		if (folder.isDirectory())
 		{
@@ -45,10 +53,12 @@ public class OutputParser
 				System.out.println("Name of file is " + part.toString());
 				BufferedReader br = new BufferedReader(new FileReader(part));
 				String line;
+				
 				while((line = br.readLine())!=null)
 				{
 					outFile.println(line);
 				}
+				
 				br.close();
 			}
 			
@@ -57,7 +67,7 @@ public class OutputParser
 		}
 		else
 		{
-			throw new Exception("Invalid outputFolder given!");
+			throw new FileNotFoundException("Invalid outputFolder given!");
 		}
 	}
 

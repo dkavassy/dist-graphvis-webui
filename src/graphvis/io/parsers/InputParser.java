@@ -47,6 +47,7 @@ package graphvis.io.parsers;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
@@ -60,7 +61,7 @@ import java.io.PrintWriter;
 public abstract class InputParser 
 {
 	// parseMethod to be implemented/overriden by all subclasses
-	public abstract void parseMethod(BufferedReader br, PrintWriter outFile) throws Exception;
+	public abstract void parseMethod(BufferedReader br, PrintWriter outFile) throws IOException;
 	
 	/**
 	 * This method takes a input file and parses it into a useful format
@@ -72,9 +73,10 @@ public abstract class InputParser
 	 * 
 	 * @param inputDir is the directory where the user specifies the full path of 
 	 * the file to be parsed.
+	 * @throws IOException 
 	 * @throws Exception 
 	 */
-	public void parse(String inputDir) throws Exception
+	public void parse(String inputDir) throws IOException
 	{
 		File inputFile = new File (inputDir);
 		// new temporary file has string flag *gv-temp* added to identify it from the original

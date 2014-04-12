@@ -66,7 +66,7 @@ public class GMLParser extends InputParser
 		{
 			line = line.trim();
 
-			if (line.equals("edge")||flag)
+			if (line.equals("edge") || flag)
 			{
 				if (flag && line.equals("edge"))
 				{

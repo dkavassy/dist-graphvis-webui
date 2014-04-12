@@ -44,6 +44,10 @@
 
 package graphvis.shellUtils;
 
+import graphvis.servlets.RunnerServlet;
+
+import java.io.IOException;
+
 
 /**
  * This class provides a means to generate the contents of valid shell
@@ -62,22 +66,23 @@ public class ShellBuilder
 	 * @return
 	 * @throws Exception
 	 */
-	private static String inputFormatChooser(String ext) throws Exception
+	private static String inputFormatChooser(String ext) throws IOException
 	{
-		// select input format name. 
+		// Select input format name. 
 		switch(ext)
 		{
 			case "graphml":
 				return "graphvis.io.GraphMLEdgeInputFormat";
-				
+
 			case "gml":
 				return "graphvis.io.GMLEdgeInputFormat";
 				
 			case "csv":
 				return "graphvis.io.CSVEdgeInputFormat";
-		}
-		
-		throw new Exception("Invalid input format!");
+				
+			default:
+			throw new IOException("Invalid input format!");
+		}		
 	}
 	
 	
@@ -93,17 +98,17 @@ public class ShellBuilder
 	 */
 	public static String scriptBuilder(String inputExt, String fileName, String compClass, int workers) throws Exception
 	{
-		// get the hadoop environment variable
+		// Get the hadoop environment variable
 		String hadoop_home = System.getenv("HADOOP_HOME");
 		
-		String script ="export HADOOP_CLASSPATH=$HADOOP_CLASSPATH:./"
-				+ "giraph-1.1.0-SNAPSHOT-for-hadoop-2.2.0-jar-with-dependencies.jar \n"
+		String script ="export HADOOP_CLASSPATH=$HADOOP_CLASSPATH:"
+				+ "./giraph-1.1.0-SNAPSHOT-for-hadoop-2.2.0-jar-with-dependencies.jar \n"
 				+ hadoop_home+"/bin/hadoop \\\n"
 				+ "org.apache.giraph.GiraphRunner " + compClass + " \\\n"
 				+ "-eif "+ inputFormatChooser(inputExt) + " \\\n"
 				+ "-eip " + fileName + " \\\n"
 				+ "-vof" + " graphvis.io.SVGVertexOutputFormat \\\n"
-				+ "-op output/graphvis \\\n"
+				+ "-op " + RunnerServlet.hdfsWorkingDirectory + " \\\n"
 				+ "-mc graphvis.engine.GraphvisMasterCompute \\\n"
 				+ "-w " + workers + " \\\n"
 				+ "-yj giraph-1.1.0-SNAPSHOT-for-hadoop-2.2.0-jar-with-dependencies.jar";

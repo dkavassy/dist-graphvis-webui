@@ -1,6 +1,7 @@
 package graphvis.tests;
 
 import static org.junit.Assert.*;
+import graphvis.servlets.RunnerServlet;
 import graphvis.shellUtils.ShellBuilder;
 
 import org.junit.Test;
@@ -23,7 +24,7 @@ public class ShellBuilderTest
 							"-eif graphvis.io.CSVEdgeInputFormat "+"\\\n"+
 							"-eip TestFile.csv "+"\\\n"+
 							"-vof graphvis.io.SVGVertexOutputFormat "+"\\\n"+
-							"-op output/graphvis "+"\\\n"+
+							"-op " + RunnerServlet.hdfsWorkingDirectory + " "+"\\\n"+
 							"-w 1 "+"\\\n"+
 							"-yj giraph-1.1.0-SNAPSHOT-for-hadoop-2.2.0-jar-with-dependencies.jar";
 		
@@ -38,7 +39,7 @@ public class ShellBuilderTest
 				"-eif graphvis.io.GMLEdgeInputFormat "+"\\\n"+
 				"-eip TestFile.gml "+"\\\n"+
 				"-vof graphvis.io.SVGVertexOutputFormat "+"\\\n"+
-				"-op output/graphvis "+"\\\n"+
+				"-op " + RunnerServlet.hdfsWorkingDirectory + " "+"\\\n"+
 				"-w 1 "+"\\\n"+
 				"-yj giraph-1.1.0-SNAPSHOT-for-hadoop-2.2.0-jar-with-dependencies.jar";
 		
@@ -53,7 +54,7 @@ public class ShellBuilderTest
 				"-eif graphvis.io.GraphMLEdgeInputFormat "+"\\\n"+
 				"-eip TestFile.graphml "+"\\\n"+
 				"-vof graphvis.io.SVGVertexOutputFormat "+"\\\n"+
-				"-op output/graphvis "+"\\\n"+
+				"-op " + RunnerServlet.hdfsWorkingDirectory + " "+"\\\n"+
 				"-w 1 "+"\\\n"+
 				"-yj giraph-1.1.0-SNAPSHOT-for-hadoop-2.2.0-jar-with-dependencies.jar";
 		

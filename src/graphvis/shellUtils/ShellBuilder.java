@@ -46,6 +46,7 @@ package graphvis.shellUtils;
 
 import graphvis.servlets.RunnerServlet;
 
+import java.io.File;
 import java.io.IOException;
 
 
@@ -105,7 +106,7 @@ public class ShellBuilder
 		String hadoop_home = System.getenv("HADOOP_HOME");
 		
 		String script ="export HADOOP_CLASSPATH=$HADOOP_CLASSPATH:"
-				+ "./giraph-1.1.0-SNAPSHOT-for-hadoop-2.2.0-jar-with-dependencies.jar \n"
+				+ "./dist-graphvis.jar" + File.pathSeparator + "./giraph-1.1.0-SNAPSHOT-for-hadoop-2.2.0-jar-with-dependencies.jar \n"
 				+ hadoop_home+"/bin/hadoop \\\n"
 				+ "org.apache.giraph.GiraphRunner " + compClass + " \\\n"
 				+ "-eif "+ inputFormatChooser(inputExt) + " \\\n"
@@ -114,7 +115,7 @@ public class ShellBuilder
 				+ "-op " + RunnerServlet.hdfsWorkingDirectory + " \\\n"
 				+ "-mc graphvis.engine.GraphvisMasterCompute \\\n"
 				+ "-w " + workers + " \\\n"
-				+ "-yj giraph-1.1.0-SNAPSHOT-for-hadoop-2.2.0-jar-with-dependencies.jar";
+				+ "-yj giraph-1.1.0-SNAPSHOT-for-hadoop-2.2.0-jar-with-dependencies.jar"+ ",dist-graphvis.jar" ;
 		
 		return script;
 	}

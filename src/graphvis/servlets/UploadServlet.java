@@ -117,6 +117,10 @@ public class UploadServlet extends HttpServlet
         		new File(getServletContext().getRealPath("giraph-1.1.0-SNAPSHOT-for-hadoop-2.2.0-jar-with-dependencies.jar")),
         		new File(tempDirectory + "/giraph-1.1.0-SNAPSHOT-for-hadoop-2.2.0-jar-with-dependencies.jar")
         		);
+        FileUtils.copyFile(
+        		new File(getServletContext().getRealPath("dist-graphvis.jar")),
+        		new File(tempDirectory + "/dist-graphvis.jar")
+        		);
 
         // Create a factory for disk-based file items
         DiskFileItemFactory factory = new DiskFileItemFactory();

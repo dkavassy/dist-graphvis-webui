@@ -42,7 +42,7 @@
 *
 */
 
-package graphvis.servlets;
+package graphvis.webui.servlets;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -64,9 +64,10 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
-import graphvis.hdfs.HDFSFileClient;
-import graphvis.io.parsers.GMLParser;
-import graphvis.io.parsers.GraphMLParser;
+import graphvis.webui.config.Configuration;
+import graphvis.webui.hdfs.HDFSFileClient;
+import graphvis.webui.parsers.GMLParser;
+import graphvis.webui.parsers.GraphMLParser;
 
 /**
  * This servlet class provides a back end to the index.jsp page
@@ -80,13 +81,7 @@ public class UploadServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
        
-	// Application caters for very large files.
-    private static final int MAX_MEMORY_SIZE  = 1024 * 1024 * 1024 * 5;
-    private static final int MAX_REQUEST_SIZE = 1024 * 1024 * 1024 * 5;
-    
-    public static final String tempDirectory = System.getProperty("java.io.tmpdir") + "/graphvis";
-
-    /**
+	/**
      * This method receives POST from the index.jsp page and uploads file, 
      * converts into the correct format then places in the HDFS.
      */
@@ -104,7 +99,7 @@ public class UploadServlet extends HttpServlet
             return;
         }
         
-        File tempDirFileObject = new File(tempDirectory);
+        File tempDirFileObject = new File(Configuration.tempDirectory);
         
         // Create/remove temp folder
         if (tempDirFileObject.exists())
@@ -116,11 +111,11 @@ public class UploadServlet extends HttpServlet
         tempDirFileObject.mkdir();
         FileUtils.copyFile(
         		new File(getServletContext().getRealPath("giraph-1.1.0-SNAPSHOT-for-hadoop-2.2.0-jar-with-dependencies.jar")),
-        		new File(tempDirectory + "/giraph-1.1.0-SNAPSHOT-for-hadoop-2.2.0-jar-with-dependencies.jar")
+        		new File(Configuration.tempDirectory + "/giraph-1.1.0-SNAPSHOT-for-hadoop-2.2.0-jar-with-dependencies.jar")
         		);
         FileUtils.copyFile(
         		new File(getServletContext().getRealPath("dist-graphvis.jar")),
-        		new File(tempDirectory + "/dist-graphvis.jar")
+        		new File(Configuration.tempDirectory + "/dist-graphvis.jar")
         		);
 
         // Create a factory for disk-based file items
@@ -128,7 +123,7 @@ public class UploadServlet extends HttpServlet
 
         // Sets the size threshold beyond which files are written directly to
         // disk.
-        factory.setSizeThreshold(MAX_MEMORY_SIZE);
+        factory.setSizeThreshold(Configuration.MAX_MEMORY_SIZE);
 
         // Sets the directory used to temporarily store files that are larger
         // than the configured size threshold. We use temporary directory for
@@ -139,7 +134,7 @@ public class UploadServlet extends HttpServlet
         ServletFileUpload upload = new ServletFileUpload(factory);
 
         // Set overall request size constraint
-        upload.setSizeMax(MAX_REQUEST_SIZE);
+        upload.setSizeMax(Configuration.MAX_REQUEST_SIZE);
 
         String fileName = "";
         try 
@@ -154,7 +149,7 @@ public class UploadServlet extends HttpServlet
                 if (!item.isFormField())
                 {
                     fileName = new File(item.getName()).getName();
-                    String filePath = tempDirectory + File.separator + fileName;
+                    String filePath = Configuration.tempDirectory + File.separator + fileName;
                     File uploadedFile = new File(filePath);
                     System.out.println(filePath);
                     // saves the file to upload directory
@@ -162,7 +157,7 @@ public class UploadServlet extends HttpServlet
                 }
             }
 
-            String fullFilePath = tempDirectory + File.separator + fileName;
+            String fullFilePath = Configuration.tempDirectory + File.separator + fileName;
             
             String extension = FilenameUtils.getExtension(fullFilePath);
 

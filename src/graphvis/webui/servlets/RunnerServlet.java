@@ -1,11 +1,11 @@
-package graphvis.servlets;
+package graphvis.webui.servlets;
 
-import graphvis.hdfs.HDFSFileClient;
-import graphvis.shellUtils.ShellBuilder;
+import graphvis.webui.config.Configuration;
+import graphvis.webui.hdfs.HDFSFileClient;
+import graphvis.webui.shellUtils.ShellBuilder;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -16,8 +16,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.fileupload.FileUploadException;
-
 /**
  * Servlet implementation class RunnerServlet
  */
@@ -26,9 +24,7 @@ public class RunnerServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
 	
-	public static String hdfsWorkingDirectory  = "graphvis-output";
-       
-    public RunnerServlet() 
+	public RunnerServlet() 
     {
         super();
     }
@@ -42,7 +38,7 @@ public class RunnerServlet extends HttpServlet
 		// computation given here
 		String      fileName = (String) getServletContext().getAttribute("fileName");
 		String       fileExt = (String) getServletContext().getAttribute("fileExtension");
-		String tempDirectory = UploadServlet.tempDirectory;
+		String tempDirectory = Configuration.tempDirectory;
 		
 		System.out.println("Temp directory to use is " + tempDirectory );
 		
@@ -79,7 +75,7 @@ public class RunnerServlet extends HttpServlet
 		    		    
 	        System.out.println("Passed the buffered stream..");
 	        HDFSFileClient hc = new HDFSFileClient();
-	        hc.moveFromHdfs(hdfsWorkingDirectory, tempDirectory + File.separator);
+	        hc.moveFromHdfs(Configuration.hdfsWorkingDirectory, tempDirectory + File.separator);
 	        
 	        // displays computationComplete.jsp page after upload finished
 	        getServletContext().getRequestDispatcher("/computationComplete.jsp").forward(

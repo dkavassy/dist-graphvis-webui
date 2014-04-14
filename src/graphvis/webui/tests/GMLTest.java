@@ -1,11 +1,10 @@
-package graphvis.tests;
+package graphvis.webui.tests;
 
 import static org.junit.Assert.*;
-import graphvis.io.parsers.GMLParser;
+import graphvis.webui.parsers.GMLParser;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;

@@ -1,5 +1,5 @@
 /*
-* @(\#) GraphMLParser.java 1.1 28 March 14
+* @(\#) GMLParser.java 1.1 28 March 14
 *
 * Copyright (\copyright) 2014 University of York & British Telecommunications plc
 * This Software is granted under the MIT License (MIT)
@@ -42,34 +42,49 @@
 *
 */
 
-package graphvis.io.parsers;
+package graphvis.webui.parsers;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
- * This class extends the abstract parent {@link InputParser} class for parsing GraphML input files
+ * This class extends the abstract parent {@link InputParser} class for parsing GML input files
  * into a format which the graphvis giraph engine can use for its  computation.
  * <p>
  * @author James Pierce
- * @version 1.1
- *
+ * @version 1.1 
  */
-public class GraphMLParser extends InputParser
+public class GMLParser extends InputParser
 {
 	@Override
-	public void parseMethod(BufferedReader br, PrintWriter outFile) throws IOException 
+	public void parseMethod(BufferedReader br, PrintWriter outFile)	throws IOException 
 	{
 		String line;
-		while ((line = br.readLine()) != null)
+		boolean flag = false;
+		while ((line = br.readLine()) != null) 
 		{
-			if (line.contains("<edge"))
+			line = line.trim();
+
+			if (line.equals("edge") || flag)
 			{
-				// write edge tag contents to output file.
-				outFile.println(line);
-			}
+				if (flag && line.equals("edge"))
+				{
+					// the end edge marker is found so we set flag to false to close 
+					// collection until the next edge marker
+					flag = false;
+					outFile.print("\n");
+				}
+				
+				// if line contains edge, set flag to true enabling all 
+				// lines between this and the next edge marker to be collected
+				flag = true;
+				outFile.print(" " + line);
+			}	
 		}
+		
 	}
 	
+	
+
 }

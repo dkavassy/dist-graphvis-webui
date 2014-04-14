@@ -42,9 +42,9 @@
 *
 */
 
-package graphvis.shellUtils;
+package graphvis.webui.shellUtils;
 
-import graphvis.servlets.RunnerServlet;
+import graphvis.webui.config.Configuration;
 
 import java.io.File;
 import java.io.IOException;
@@ -113,7 +113,7 @@ public class ShellBuilder
 				+ "-eif "+ inputFormatChooser(inputExt) + " \\\n"
 				+ "-eip " + fileName + " \\\n"
 				+ "-vof" + " graphvis.io.SVGVertexOutputFormat \\\n"
-				+ "-op " + RunnerServlet.hdfsWorkingDirectory + " \\\n"
+				+ "-op " + Configuration.hdfsWorkingDirectory + " \\\n"
 				+ "-mc graphvis.engine.GraphvisMasterCompute \\\n"
 				+ "-w " + workers + " \\\n"
 				+ "-yj giraph-1.1.0-SNAPSHOT-for-hadoop-2.2.0-jar-with-dependencies.jar"+ ",dist-graphvis.jar" ;

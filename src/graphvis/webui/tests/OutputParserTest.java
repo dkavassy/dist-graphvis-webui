@@ -1,7 +1,7 @@
-package graphvis.tests;
+package graphvis.webui.tests;
 
 import static org.junit.Assert.*;
-import graphvis.io.parsers.OutputParser;
+import graphvis.webui.parsers.OutputParser;
 
 import java.io.File;
 import java.io.FileNotFoundException;

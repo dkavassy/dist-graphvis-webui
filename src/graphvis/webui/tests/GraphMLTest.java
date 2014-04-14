@@ -1,4 +1,4 @@
-package graphvis.tests;
+package graphvis.webui.tests;
 
 import static org.junit.Assert.*;
 
@@ -9,7 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import graphvis.io.parsers.GraphMLParser;
+import graphvis.webui.parsers.GraphMLParser;
 
 import org.junit.After;
 import org.junit.Before;

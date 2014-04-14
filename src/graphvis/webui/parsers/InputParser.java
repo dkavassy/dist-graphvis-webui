@@ -42,7 +42,7 @@
 *
 */
 
-package graphvis.io.parsers;
+package graphvis.webui.parsers;
 
 import java.io.BufferedReader;
 import java.io.File;

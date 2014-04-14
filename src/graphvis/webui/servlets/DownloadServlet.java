@@ -1,6 +1,7 @@
-package graphvis.servlets;
+package graphvis.webui.servlets;
 
-import graphvis.io.parsers.OutputParser;
+import graphvis.webui.config.Configuration;
+import graphvis.webui.parsers.OutputParser;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,8 +13,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.hadoop.hdfs.server.namenode.FileChecksumServlets.GetServlet;
 
 /**
  * Servlet implementation class DownloadServlet
@@ -37,14 +36,13 @@ public class DownloadServlet extends HttpServlet
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException 
 	{
-		String fileName = (String) getServletContext().getAttribute("fileName");
-		String tempDirectory = UploadServlet.tempDirectory;
+		String tempDirectory = Configuration.tempDirectory;
 		String resultFile = tempDirectory + "/CombinedResults.txt";
 		
 		System.out.println("Download request GOT...combining now");
 		
 		OutputParser op = new OutputParser();
-		op.parseAndCombine(tempDirectory + File.separator + RunnerServlet.hdfsWorkingDirectory, resultFile);
+		op.parseAndCombine(tempDirectory + File.separator + Configuration.hdfsWorkingDirectory, resultFile);
 		
 		System.out.println("Redirecting now..");
 		

@@ -1,4 +1,4 @@
-package graphvis.tests;
+package graphvis.webui.tests;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;

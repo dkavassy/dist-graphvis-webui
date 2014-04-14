@@ -1,4 +1,4 @@
-package graphvis.tests;
+package graphvis.webui.tests;
 
 import static org.junit.Assert.*;
 
@@ -7,12 +7,8 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.PrintWriter;
+import graphvis.webui.hdfs.HDFSFileClient;
 
-import graphvis.hdfs.HDFSFileClient;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.junit.After;
 import org.junit.Before;
@@ -33,7 +29,7 @@ public class HDFSFileClientTest
 		localFile.createNewFile();
 		FileWriter fw = new FileWriter(localFile);
 		fw.write("Test Contents of a local file!");
-		
+		fw.close();
 		
 		// Note you must start dfs first to get these tests to work.
 		dfs = new HDFSFileClient();

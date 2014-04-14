@@ -42,7 +42,7 @@
 *
 */
 
-package graphvis.hdfs;
+package graphvis.webui.hdfs;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

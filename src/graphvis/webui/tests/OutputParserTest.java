@@ -61,14 +61,24 @@ public class OutputParserTest {
 		assertTrue(combinedFile.exists());
 		@SuppressWarnings("resource")
 		String text = new Scanner( combinedFile).useDelimiter("\\A").next();
-		String expected = "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n"
+		
+		String expected1 = "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n"
 				+ "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n"
 				+ "<script xlink:href=\"SVGPan.js\"/>\n"
 				+ "<g id=\"viewport\" transform=\"translate(200,200)\">\n\n"
 				+"1\nTest\n"
 				+"</g>\n</svg>\n";
+		
+		String expected2 = "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n"
+				+ "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n"
+				+ "<script xlink:href=\"SVGPan.js\"/>\n"
+				+ "<g id=\"viewport\" transform=\"translate(200,200)\">\n\n"
+				+"Test\n1\n"
+				+"</g>\n</svg>\n";
+		
 		combinedFile.delete();
-		assertEquals(expected,text);
+		
+		assertTrue(expected1.equals(text) || expected2.equals(text));
 	}
 
 	@Test(expected=FileNotFoundException.class)

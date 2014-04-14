@@ -76,7 +76,7 @@ public class HDFSFileClientTest
 			{
 				System.out.println("File is present in dfs: "
 						+dfs.fileSystem.getFileStatus(new Path("./testLocalFile.txt")).isFile());
-				assertTrue(false);
+				fail();
 			}
 			catch (Exception e)
 			{
@@ -95,7 +95,7 @@ public class HDFSFileClientTest
 			catch (Exception e)
 			{
 				e.printStackTrace();
-				assertTrue(false);
+				fail();
 			}
 			
 			// now check it is no longer in local directory

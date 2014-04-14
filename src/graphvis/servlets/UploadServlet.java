@@ -90,7 +90,8 @@ public class UploadServlet extends HttpServlet
      * This method receives POST from the index.jsp page and uploads file, 
      * converts into the correct format then places in the HDFS.
      */
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+    		throws ServletException, IOException 
     {
 
         // Check that we have a file upload request

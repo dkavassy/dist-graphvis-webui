@@ -26,7 +26,7 @@ public class RunnerServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
 	
-	public static String hdfsWorkingDirectory = "graphvis-output";
+	public static String hdfsWorkingDirectory  = "graphvis-output";
        
     public RunnerServlet() 
     {

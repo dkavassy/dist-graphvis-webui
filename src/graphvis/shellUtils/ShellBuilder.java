@@ -99,7 +99,8 @@ public class ShellBuilder
 	 * @return {@link String} containing the shell script to be executed.
 	 * @throws Exception
 	 */
-	public static String scriptBuilder(String inputExt, String fileName, String compClass, int workers) throws Exception
+	public static String scriptBuilder(String inputExt, String fileName, String compClass, int workers) 
+			throws Exception
 	{
 		// Get the hadoop environment variable
 		String hadoop_home = System.getenv("HADOOP_HOME");

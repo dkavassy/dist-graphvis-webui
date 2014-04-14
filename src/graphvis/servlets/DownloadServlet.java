@@ -53,6 +53,7 @@ public class DownloadServlet extends HttpServlet
 		
 		File file = new File(resultFile);
 		response.setContentLength((int) file.length());
+		
 		FileInputStream  fileIn = new FileInputStream(file);
 		ServletOutputStream out = response.getOutputStream();
 		

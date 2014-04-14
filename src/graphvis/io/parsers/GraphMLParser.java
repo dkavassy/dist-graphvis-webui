@@ -53,7 +53,7 @@ import java.io.PrintWriter;
  * into a format which the graphvis giraph engine can use for its  computation.
  * <p>
  * @author James Pierce
- * @version 1.1 
+ * @version 1.1
  *
  */
 public class GraphMLParser extends InputParser
@@ -62,14 +62,14 @@ public class GraphMLParser extends InputParser
 	public void parseMethod(BufferedReader br, PrintWriter outFile) throws IOException 
 	{
 		String line;
-		while ((line = br.readLine()) != null) 
+		while ((line = br.readLine()) != null)
 		{
 			if (line.contains("<edge"))
 			{
 				// write edge tag contents to output file.
 				outFile.println(line);
 			}
-		}		
+		}
 	}
 	
 }

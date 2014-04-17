@@ -16,7 +16,6 @@
 <br />
 <br />
 <a href="DownloadServlet"> Download </a>
-</form>
 </body>
 </html>
 

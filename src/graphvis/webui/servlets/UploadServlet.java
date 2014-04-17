@@ -44,7 +44,6 @@
 
 package graphvis.webui.servlets;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -95,7 +94,6 @@ public class UploadServlet extends HttpServlet
         if (!isMultipart) 
         {
         	response.setStatus(403);
-            response.sendRedirect("/error.jsp");
             return;
         }
         
@@ -153,7 +151,11 @@ public class UploadServlet extends HttpServlet
                     File uploadedFile = new File(filePath);
                     System.out.println(filePath);
                     // saves the file to upload directory
-                    item.write(uploadedFile);
+                    try {
+						item.write(uploadedFile);
+					} catch (Exception ex) {
+						throw new ServletException(ex);
+					}
                 }
             }
 
@@ -177,20 +179,6 @@ public class UploadServlet extends HttpServlet
         {
             throw new ServletException(ex);
         }
-        catch (FileNotFoundException ex) 
-        {
-        	getServletContext().setAttribute("errorMessage", ex);
-            response.sendRedirect("/error.jsp");
-        } 
-        catch (IOException ex) 
-        {
-        	getServletContext().setAttribute("errorMessage", ex);
-            response.sendRedirect("/error.jsp");
-        }
-        catch (Exception ex)
-        {
-            throw new ServletException(ex);
-		}
 
     }
     

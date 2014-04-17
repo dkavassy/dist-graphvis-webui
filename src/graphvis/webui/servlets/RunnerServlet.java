@@ -81,16 +81,6 @@ public class RunnerServlet extends HttpServlet
 	        getServletContext().getRequestDispatcher("/computationComplete.jsp").forward(
 	                request, response);
 		}
-        /*catch (FileNotFoundException ex) 
-        {
-        	getServletContext().setAttribute("errorMessage", ex);
-            response.sendRedirect("/error.jsp");
-        } 
-        catch (IOException ex) 
-        {
-        	getServletContext().setAttribute("errorMessage", ex);
-            response.sendRedirect("/error.jsp");
-        }*/
         catch (Exception ex)
         {
             throw new ServletException(ex);

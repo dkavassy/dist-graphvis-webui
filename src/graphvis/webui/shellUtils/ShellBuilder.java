@@ -46,7 +46,7 @@ public class ShellBuilder
 	 * 
 	 * @param ext this is the {@link String} input for the file extension of 
 	 * the input data. This method is exclusively used by the scriptBuilder method.
-	 * @return
+	 * @return format class name
 	 * @throws Exception
 	 */
 	private static String inputFormatChooser(String ext) throws IOException
